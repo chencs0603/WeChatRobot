@@ -4,16 +4,14 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
+import personal.chencs.wechat.models.Config;
+
 /**
  * 请求校验工具类
- * 
- * @author liufeng
- * @date 2013-09-01
+ * @author chencs
+ *
  */
 public class SignUtil {
-	// 与开发模式接口配置信息中的Token保持一致
-	private static String token = "excelsecu";
-
 	/**
 	 * 校验签名
 	 * 
@@ -24,7 +22,7 @@ public class SignUtil {
 	 */
 	public static boolean checkSignature(String signature, String timestamp, String nonce) {
 		// 对token、timestamp和nonce按字典排序
-		String[] paramArr = new String[] { token, timestamp, nonce };
+		String[] paramArr = new String[] { Config.TOKEN, timestamp, nonce };
 		Arrays.sort(paramArr);
 
 		// 将排序后的结果拼接成一个字符串
@@ -35,7 +33,7 @@ public class SignUtil {
 			MessageDigest md = MessageDigest.getInstance("SHA-1");
 			// 对接后的字符串进行sha1加密
 			byte[] digest = md.digest(content.toString().getBytes());
-			ciphertext = byteToStr(digest);
+			ciphertext = bytesToHexStr(digest);
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
@@ -50,7 +48,7 @@ public class SignUtil {
 	 * @param byteArray
 	 * @return
 	 */
-	private static String byteToStr(byte[] byteArray) {
+	private static String bytesToHexStr(byte[] byteArray) {
 		String strDigest = "";
 		for (int i = 0; i < byteArray.length; i++) {
 			strDigest += byteToHexStr(byteArray[i]);
