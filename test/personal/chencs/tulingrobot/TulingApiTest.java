@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import personal.chencs.tulingrobot.TulingRobotApi;
 
-public class TestTulingApi {
+public class TulingApiTest {
 
 	@Test
 	public void test() throws JSONException {
