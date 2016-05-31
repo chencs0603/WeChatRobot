@@ -1,4 +1,4 @@
-package personal.chencs.wechat.helpers;
+package personal.chencs.wechat.utils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -7,44 +7,43 @@ import java.util.Arrays;
 import personal.chencs.wechat.models.Config;
 
 /**
- * ÇëÇóĞ£Ñé¹¤¾ßÀà
+ * ç­¾åå·¥å…·ç±»
  * @author chencs
  *
  */
-public class SignUtil {
+public class SignUtils {
 	/**
-	 * Ğ£ÑéÇ©Ãû
+	 * è·å¾—JS-SDKä½¿ç”¨æƒé™ç­¾å
 	 * 
-	 * @param signature Î¢ĞÅ¼ÓÃÜÇ©Ãû
-	 * @param timestamp Ê±¼ä´Á
-	 * @param nonce Ëæ»úÊı
+	 * @param signature ç­¾åæŒ‡
+	 * @param timestamp æ—¶é—´æˆ³
+	 * @param nonce éšæœºæ•°
 	 * @return
 	 */
 	public static boolean checkSignature(String signature, String timestamp, String nonce) {
-		// ¶Ôtoken¡¢timestampºÍnonce°´×ÖµäÅÅĞò
+		// å°†tokenã€timestampã€nonceè¿›è¡Œå­—å…¸æ’åº
 		String[] paramArr = new String[] { Config.TOKEN, timestamp, nonce };
 		Arrays.sort(paramArr);
 
-		// ½«ÅÅĞòºóµÄ½á¹ûÆ´½Ó³ÉÒ»¸ö×Ö·û´®
+		// å°†ä¸‰ä¸ªå­—ç¬¦ä¸²æ‹¼æ¥
 		String content = paramArr[0].concat(paramArr[1]).concat(paramArr[2]);
 
 		String ciphertext = null;
 		try {
+			//è¿›è¡ŒSHA1ç­¾å
 			MessageDigest md = MessageDigest.getInstance("SHA-1");
-			// ¶Ô½ÓºóµÄ×Ö·û´®½øĞĞsha1¼ÓÃÜ
 			byte[] digest = md.digest(content.toString().getBytes());
 			ciphertext = bytesToHexStr(digest);
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
 		
-		// ½«sha1¼ÓÃÜºóµÄ×Ö·û´®Óësignature½øĞĞ¶Ô±È
+		// ç­¾åå€¼ç›¸ç­‰åˆ™è¿”å›trueï¼Œå¦åˆ™è¿”å›false
 		return ciphertext != null ? ciphertext.equals(signature.toUpperCase()) : false;
 	}
 
 	/**
-	 * ½«×Ö½ÚÊı×é×ª»»ÎªÊ®Áù½øÖÆ×Ö·û´®
-	 * 
+	 * å°†byteæ•°ç»„è½¬æ¢ä¸º16è¿›åˆ¶å­—ç¬¦ä¸²
 	 * @param byteArray
 	 * @return
 	 */
@@ -57,8 +56,7 @@ public class SignUtil {
 	}
 
 	/**
-	 * ½«×Ö½Ú×ª»»ÎªÊ®Áù½øÖÆ×Ö·û´®
-	 * 
+	 * å°†byteè½¬æ¢ä¸º16è¿›åˆ¶å­—ç¬¦ä¸²
 	 * @param mByte
 	 * @return
 	 */

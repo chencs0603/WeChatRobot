@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import personal.chencs.wechat.helpers.SignUtil;
+import personal.chencs.wechat.utils.SignUtils;
 
 /**
  * 请求处理的核心类
@@ -30,7 +30,7 @@ public class CoreServlet extends HttpServlet {
 			String signature = request.getParameter("signature");
 			String echostr = request.getParameter("echostr");
 			// 请求校验，若校验成功则原样返回echostr，表示接入成功，否则接入失败
-			if (SignUtil.checkSignature(signature, timestamp, nonce)) {
+			if (SignUtils.checkSignature(signature, timestamp, nonce)) {
 				out(echostr, response);
 			} else {
 				out("", response);
