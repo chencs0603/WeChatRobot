@@ -2,6 +2,7 @@ package personal.chencs.wechat.service;
 
 import java.util.Map;
 
+import personal.chencs.tulingrobot.TulingRobotApi;
 import personal.chencs.wechat.models.MsgType;
 import personal.chencs.wechat.models.XmlResponse;
 
@@ -9,7 +10,7 @@ import personal.chencs.wechat.models.XmlResponse;
 
 public class CoreService {
 	
-	public static String handle(Map<String, String> reqMap) {
+	public static String handle(Map<String, String> reqMap){
 		// 文档位置：接收消息
 		String msgType = reqMap.get("MsgType");
 		String fromUser = reqMap.get("FromUserName");
@@ -20,7 +21,8 @@ public class CoreService {
 		if (MsgType.TEXT.equals(msgType)) {
 			// 可以在此处进行关键字自动回复
 			String content = "[自动回复]收到文本消息：" + reqMap.get("Content");
-			return XmlResponse.buildText(fromUser, toUser, content);
+			String response = TulingRobotApi.getTulingResult(content);
+			return XmlResponse.buildText(fromUser, toUser, response);
 		}
 
 		// 基础事件推送
@@ -29,6 +31,7 @@ public class CoreService {
 			// 订阅/取消订阅事件
 			switch (event) {
 			case MsgType.Event.SUBSCRIBE:
+				System.out.println("关注");
 				//根据openid获取用户基本信息
 				
 				// 保存用户信息
@@ -38,6 +41,7 @@ public class CoreService {
 						"Welcome to WeChat Subscription of Chencs!");
 			case MsgType.Event.UNSUBSCRIBE:
 				// 删除用户信息
+				System.out.println("取消关注");
 				return "";
 			default:
 				return "";

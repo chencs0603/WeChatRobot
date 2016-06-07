@@ -1,4 +1,4 @@
-﻿package personal.chencs.tulingrobot;
+package personal.chencs.tulingrobot;
 
 import java.io.IOException;
 
@@ -13,15 +13,9 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
 
+import net.sf.json.JSONObject;
 
-/**
- * 调用图灵机器人api接口，获取智能回复内容
- * @author chencs
- *
- */
 public class TulingRobotApi {
 	/**
 	 * 图灵机器人api接口地址，
@@ -34,7 +28,7 @@ public class TulingRobotApi {
 	 * @return
 	 * @throws JSONException 
 	 */
-	public String getTulingResult(String content) throws JSONException{
+	public static String getTulingResult(String content){
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		HttpPost httpPost = new HttpPost(TULING_ROBOT_API_URL);
 		
@@ -71,7 +65,9 @@ public class TulingRobotApi {
 		}
 		
 		String result = "";
-		JSONObject jsonResult = new JSONObject(resultContent);
+		JSONObject jsonResult;
+		
+		jsonResult = JSONObject.fromObject(resultContent);
 		//以code=100000为例，参考图灵机器人api文档
 		if(100000 == jsonResult.getInt("code")){
 			result = jsonResult.getString("text");
@@ -81,6 +77,7 @@ public class TulingRobotApi {
 		else{
 			result = "您的话太高深，我怎么听不懂呢";
 		}
+		
 		
 		return result;
 	}
